@@ -17,12 +17,14 @@
  * <script language="javascript" src="jspark.js"></script>
  */
 
+ var showZeroLine = true;
+
 addEvent( window, "load", function() {
   var a = document.getElementsByTagName("*") || document.all;
 
   for ( var i = 0; i < a.length; i++ )
     if ( has( a[i].className, "sparkline" ) )
-      sparkline( a[i] );
+      sparkline( a[i], showZeroLine );
 } );
 
 function has(s,c) {
@@ -48,7 +50,7 @@ function removeEvent( obj, type, fn ) {
 }
 
 
-function sparkline(o) {
+function sparkline(o, zeroLine) {
   var p = o.innerHTML.split(',');
   while ( o.childNodes.length > 0 )
     o.removeChild( o.firstChild );
@@ -88,9 +90,25 @@ function sparkline(o) {
     if ( p[i] < min ) min = p[i];
     if ( p[i] > max ) max = p[i];
   }
+  //Make zero line always visiable... might be bad if you have only large values away from zero, you'll end up with just a straight line
+  if (zeroLine) {
+    if ( 0 < min ) min = 0;
+    if ( 0 > max ) max = 0;
+  }
 
   if ( co.getContext ) {
     var c = co.getContext("2d");
+
+    //Drawing the zero line
+    c.strokeStyle = "grey";
+    c.lineWidth = 1.0;
+    c.beginPath();
+    c.moveTo( 0, h - (((0 - min) / (max - min)) * h) );
+    c.lineTo( (w), h - (((0 - min) / (max - min)) * h) );
+    c.stroke();
+
+
+    //Drawing the sparkline
     c.strokeStyle = "red";
     c.lineWidth = 1.0;
     c.beginPath();
