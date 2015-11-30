@@ -115,8 +115,8 @@ function sparkline(o, zeroLine) {
 
     for ( var i = 0; i < p.length; i++ ) {
       if ( i == 0 )
-        c.moveTo( (w / p.length) * i, h - (((p[i] - min) / (max - min)) * h) );
-      c.lineTo( (w / p.length) * i, h - (((p[i] - min) / (max - min)) * h) );
+        c.moveTo( (w / (p.length-1)) * i, h - (((p[i] - min) / (max - min)) * h) );
+      c.lineTo( (w / (p.length-1)) * i, h - (((p[i] - min) / (max - min)) * h) );
     }
 
     c.stroke();
